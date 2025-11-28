@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Pro 배터리 진단기</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&family=Roboto+Mono:wght@500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ Pro 배터리 진단기</h1>
+            <p>산업용 정밀 알고리즘 탑재</p>
+        </header>
+
+        <main>
+            <div class="section-card">
+                <div class="input-group">
+                    <label class="highlight-label">📌 진단 대상 (메모)</label>
+                    <input type="text" id="memo" placeholder="예: 김사장님 지게차 2호기">
+                </div>
+            </div>
+
+            <div class="input-section">
+                <h3>1. 기본 정보 입력</h3>
+                <div class="input-group">
+                    <label>배터리 종류</label>
+                    <select id="batteryType">
+                        <option value="lead">납축전지 (지게차/골프카트/차량)</option>
+                        <option value="nmc">리튬이온 (NMC) - 전기차/공구</option>
+                        <option value="lfp">인산철 (LFP) - 파워뱅크/캠핑</option>
+                    </select>
+                </div>
+                
+                <div class="grid-2col">
+                    <div class="input-group">
+                        <label>설계 용량 (Ah)</label>
+                        <input type="number" id="designCap" value="100">
+                    </div>
+                    <div class="input-group">
+                        <label>사용 기간 (개월)</label>
+                        <input type="number" id="ageMonths" placeholder="개월">
+                    </div>
+                </div>
+
+                <div class="grid-2col">
+                    <div class="input-group">
+                        <label>충전 횟수 (회)</label>
+                        <input type="number" id="cycles" placeholder="회">
+                    </div>
+                    <div class="input-group">
+                        <label>평균 온도 (℃)</label>
+                        <input type="number" id="tempInput" value="25">
+                    </div>
+                </div>
+
+                <h3>2. 운용 환경 (정밀 보정)</h3>
+                <div class="input-group">
+                    <label>평균 방전 깊이 (DOD): <span id="dodVal" class="val-text">80</span>%</label>
+                    <input type="range" id="dodRange" min="10" max="100" value="80" oninput="updateVal('dodVal', this.value)">
+                    <p class="desc-text">※ 보통 80% 사용. 바닥까지 다 쓰면 100%</p>
+                </div>
+
+                <div class="input-group">
+                    <label>충전 속도 (C-Rate): <span id="cRateVal" class="val-text">0.5</span>C</label>
+                    <input type="range" id="cRateRange" min="0.1" max="2.0" step="0.1" value="0.5" oninput="updateVal('cRateVal', this.value)">
+                    <p class="desc-text">※ 완속 0.5C 이하, 급속 1.0C 이상</p>
+                </div>
+
+                <button onclick="calculateProfessionalSOH()" class="btn-primary">정밀 진단 실행</button>
+            </div>
+
+            <div id="resultBox" class="result-box hidden">
+                <div class="report-header">📋 정밀 진단 리포트</div>
+                
+                <div class="soh-display">
+                    <span class="label">잔여 수명 (SOH)</span>
+                    <span id="finalSoh" class="value">100.0%</span>
+                </div>
+
+                <div id="healthMessage" class="diagnosis-msg"></div>
+
+                <div class="chart-area">
+                    <div class="bar-group">
+                        <span>세월 노화 (캘린더)</span>
+                        <div class="bar-bg"><div id="calBar" class="bar-fill cal"></div></div>
+                        <span id="calVal" class="bar-num">0%</span>
+                    </div>
+                    <div class="bar-group">
+                        <span>사용 노화 (사이클)</span>
+                        <div class="bar-bg"><div id="cycBar" class="bar-fill cyc"></div></div>
+                        <span id="cycVal" class="bar-num">0%</span>
+                    </div>
+                </div>
+
+                <div class="details-list">
+                    <p>• 현재 실용량: <span id="currentCap">0</span> Ah</p>
+                    <p>• 주요 원인: <span id="agingReason">-</span></p>
+                </div>
+
+                <textarea id="copyText" style="display:none;"></textarea>
+
+                <div class="action-buttons">
+                    <button onclick="copyReport()" class="btn-copy">리포트 복사 (카톡 전송)</button>
+                    <button onclick="resetForm()" class="btn-reset">새로 입력</button>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
