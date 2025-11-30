@@ -136,8 +136,8 @@ function calculateProfessionalSOH() {
 - 운용 환경: DOD ${dodPercent}%, 온도 ${tempC}℃
 
 🔍 상세 분석
-- 세월 노화(캘린더): -${calLoss.toFixed(1)}%
-- 사용 노화(사이클): -${cycLoss.toFixed(1)}%
+- 캘린더 노화: -${calLoss.toFixed(1)}%
+- 싸이클 노화: -${cycLoss.toFixed(1)}%
 - 주요 원인: ${reason}
 
 ※ 본 리포트는 NREL 모델 기반 추정치입니다.`;
